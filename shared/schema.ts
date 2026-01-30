@@ -1,20 +1,19 @@
-import { pgTable, text, serial, boolean } from "drizzle-orm/pg-core";
-import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-export const content = pgTable("content", {
-  id: serial("id").primaryKey(),
-  title: text("title").notNull(),
-  description: text("description").notNull(),
-  category: text("category").notNull(), // 'news', 'operation', 'equipment'
-  type: text("type").notNull(), // 'article', 'video', 'audio'
-  date: text("date").notNull(),
-  tags: text("tags").array(),
-  imageUrl: text("image_url"),
-  isFeatured: boolean("is_featured").default(false),
+// Demo/POC schema - plain types, no database
+export const contentSchema = z.object({
+  id: z.number(),
+  title: z.string(),
+  description: z.string(),
+  category: z.string(),
+  type: z.string(),
+  date: z.string(),
+  tags: z.array(z.string()).optional().default([]),
+  imageUrl: z.string().optional(),
+  isFeatured: z.boolean().optional().default(false),
 });
 
-export const insertContentSchema = createInsertSchema(content).omit({ id: true });
+export const insertContentSchema = contentSchema.omit({ id: true });
 
-export type Content = typeof content.$inferSelect;
+export type Content = z.infer<typeof contentSchema>;
 export type InsertContent = z.infer<typeof insertContentSchema>;

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { api, type Content } from "@shared/routes";
+import { useContent } from "@/hooks/use-content";
+import type { Content } from "@shared/schema";
 import { SearchInput } from "@/components/SearchInput";
 import { FilterSheet } from "@/components/FilterSheet";
 import { ContentGrid } from "@/components/ContentGrid";
@@ -16,27 +16,20 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
 
-  // Fetch all content
-  const { data: content = [], isLoading } = useQuery({
-    queryKey: [api.content.list.path],
-    queryFn: async () => {
-      const res = await fetch(api.content.list.path);
-      if (!res.ok) return []; // Fallback for POC if backend not ready
-      return api.content.list.responses[200].parse(await res.json());
-    },
-  });
+  // Demo/POC: content from local dummy data (no server)
+  const { data: content = [], isLoading } = useContent();
 
   // Client-side filtering for POC responsiveness
   const isSearching = searchQuery.length > 0;
-  
+
   const filteredContent = content.filter(item => {
     if (!isSearching) return true;
-    
-    const matchesSearch = 
+
+    const matchesSearch =
       item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.description.toLowerCase().includes(searchQuery.toLowerCase());
-      
-    const matchesFilter = activeFilter 
+
+    const matchesFilter = activeFilter
       ? item.tags?.includes(activeFilter) || item.category === activeFilter
       : true;
 
@@ -44,9 +37,9 @@ export default function Home() {
   });
 
   const featured = content.find(c => c.isFeatured) || content[0];
-  const operations = content.filter(c => c.category === 'operation').slice(0, 4);
+  const operations = content.filter(c => c.category === 'operations').slice(0, 4);
   const equipment = content.filter(c => c.category === 'equipment').slice(0, 4);
-  
+
   // Simulated search results
   const topMatches = filteredContent.slice(0, 2);
   const allMatches = filteredContent.slice(2);
@@ -62,11 +55,6 @@ export default function Home() {
             </div>
             <span>SEARCH<span className="text-primary">POC</span></span>
           </div>
-          <div className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
-            <span className="hover:text-foreground cursor-pointer transition-colors">NEWS</span>
-            <span className="hover:text-foreground cursor-pointer transition-colors">OPERATIONS</span>
-            <span className="hover:text-foreground cursor-pointer transition-colors">EQUIPMENT</span>
-          </div>
           <div className="w-8 h-8 rounded-full bg-secondary"></div>
         </div>
       </header>
@@ -78,7 +66,7 @@ export default function Home() {
             News and Featured
           </h1>
           <div className="flex-1 max-w-2xl flex items-center gap-4">
-            <SearchInput 
+            <SearchInput
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onClear={() => setSearchQuery("")}
@@ -87,11 +75,11 @@ export default function Home() {
             <FilterSheet />
           </div>
         </div>
-          
+
         {/* Applied Filters (Visible only when searching) */}
         <AnimatePresence>
           {isSearching && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
@@ -99,8 +87,8 @@ export default function Home() {
             >
               <div className="flex flex-wrap gap-2 items-center">
                 {activeFilter && (
-                  <Badge 
-                    variant="secondary" 
+                  <Badge
+                    variant="secondary"
                     className="px-3 py-1.5 gap-2 rounded-lg bg-muted text-foreground border-none hover:bg-muted/80"
                   >
                     {activeFilter}
@@ -109,16 +97,16 @@ export default function Home() {
                 )}
                 {/* Dummy applied filters based on mock-up */}
                 {["Asia", "Cyberspace", "Middle East", "North America", "Senior Leadership", "Space", "QRA"].map(filter => (
-                  <Badge 
+                  <Badge
                     key={filter}
-                    variant="secondary" 
+                    variant="secondary"
                     className="px-3 py-1.5 gap-2 rounded-lg bg-muted text-foreground border-none hover:bg-muted/80"
                   >
                     {filter}
                     <X className="w-3 h-3 cursor-pointer" />
                   </Badge>
                 ))}
-                <button 
+                <button
                   onClick={() => setActiveFilter(null)}
                   className="text-sm font-bold flex items-center gap-1 ml-2 hover:underline"
                 >
@@ -146,8 +134,8 @@ export default function Home() {
                 {/* Hero Featured Item */}
                 {featured && (
                   <div className="mb-16 relative rounded-3xl overflow-hidden aspect-[21/9] group cursor-pointer shadow-2xl shadow-black/10">
-                    <img 
-                      src={featured.imageUrl || "https://images.unsplash.com/photo-1542281286-9e0a16bb7366?auto=format&fit=crop&q=80"} 
+                    <img
+                      src={featured.imageUrl || "https://images.unsplash.com/photo-1542281286-9e0a16bb7366?auto=format&fit=crop&q=80"}
                       alt={featured.title}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
@@ -169,7 +157,7 @@ export default function Home() {
 
                 <ContentGrid title="OPERATIONS" items={operations} />
                 <ContentGrid title="EQUIPMENT & TECHNOLOGY" items={equipment} />
-                
+
                 <section className="py-12 bg-secondary/30 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 mt-8">
                   <div className="max-w-7xl mx-auto">
                     <div className="flex items-center justify-between mb-8">
@@ -179,13 +167,13 @@ export default function Home() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                       {operations.slice(0, 3).map(item => (
                         <div key={item.id} className="flex gap-4 items-start">
-                           <div className="w-24 h-24 bg-muted rounded-lg shrink-0 overflow-hidden">
-                             {item.imageUrl && <img src={item.imageUrl} className="w-full h-full object-cover" />}
-                           </div>
-                           <div>
-                             <h4 className="font-bold text-base leading-snug mb-1">{item.title}</h4>
-                             <p className="text-sm text-muted-foreground line-clamp-2">{item.description}</p>
-                           </div>
+                          <div className="w-24 h-24 bg-muted rounded-lg shrink-0 overflow-hidden">
+                            {item.imageUrl && <img src={item.imageUrl} className="w-full h-full object-cover" />}
+                          </div>
+                          <div>
+                            <h4 className="font-bold text-base leading-snug mb-1">{item.title}</h4>
+                            <p className="text-sm text-muted-foreground line-clamp-2">{item.description}</p>
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -244,31 +232,31 @@ export default function Home() {
                       allMatches.map(item => (
                         <div key={item.id} className="p-6 hover:bg-muted/30 transition-colors flex flex-col md:flex-row gap-6 cursor-pointer group">
                           <div className="w-full md:w-48 aspect-video bg-muted rounded-lg shrink-0 overflow-hidden">
-                             {item.imageUrl && (
-                               <img src={item.imageUrl} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                             )}
+                            {item.imageUrl && (
+                              <img src={item.imageUrl} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                            )}
                           </div>
                           <div className="flex-1">
-                             <div className="flex items-center gap-2 mb-2">
-                                <span className="px-2 py-0.5 rounded text-xs font-medium bg-secondary text-secondary-foreground uppercase">{item.type}</span>
-                                <span className="text-xs text-muted-foreground">{item.date}</span>
+                            <div className="flex items-center gap-2 mb-2">
+                              <span className="px-2 py-0.5 rounded text-xs font-medium bg-secondary text-secondary-foreground uppercase">{item.type}</span>
+                              <span className="text-xs text-muted-foreground">{item.date}</span>
+                            </div>
+                            <h4 className="font-bold text-xl mb-2 group-hover:text-primary transition-colors">{item.title}</h4>
+                            <p className="text-muted-foreground mb-4 line-clamp-2">{item.description}</p>
+                            {item.tags && (
+                              <div className="flex flex-wrap gap-2">
+                                {item.tags.map(tag => (
+                                  <span key={tag} className="text-xs text-muted-foreground bg-secondary/50 px-2 py-1 rounded">#{tag}</span>
+                                ))}
                               </div>
-                              <h4 className="font-bold text-xl mb-2 group-hover:text-primary transition-colors">{item.title}</h4>
-                              <p className="text-muted-foreground mb-4 line-clamp-2">{item.description}</p>
-                              {item.tags && (
-                                <div className="flex flex-wrap gap-2">
-                                  {item.tags.map(tag => (
-                                    <span key={tag} className="text-xs text-muted-foreground bg-secondary/50 px-2 py-1 rounded">#{tag}</span>
-                                  ))}
-                                </div>
-                              )}
+                            )}
                           </div>
                         </div>
                       ))
                     ) : (
-                       <div className="p-12 text-center text-muted-foreground">
-                         <p>No other matches found.</p>
-                       </div>
+                      <div className="p-12 text-center text-muted-foreground">
+                        <p>No other matches found.</p>
+                      </div>
                     )}
                   </div>
                 </div>
