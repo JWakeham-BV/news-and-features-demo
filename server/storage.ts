@@ -1,37 +1,39 @@
-import { type User, type InsertUser } from "@shared/schema";
-import { randomUUID } from "crypto";
-
-// modify the interface with any CRUD methods
-// you might need
+import { type Content, type InsertContent } from "@shared/schema";
 
 export interface IStorage {
-  getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+  getAllContent(): Promise<Content[]>;
+  searchContent(query: string): Promise<Content[]>;
+  createContent(content: InsertContent): Promise<Content>;
 }
 
 export class MemStorage implements IStorage {
-  private users: Map<string, User>;
+  private content: Map<number, Content>;
+  private currentId: number;
 
   constructor() {
-    this.users = new Map();
+    this.content = new Map();
+    this.currentId = 1;
   }
 
-  async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
+  async getAllContent(): Promise<Content[]> {
+    return Array.from(this.content.values());
   }
 
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
+  async searchContent(query: string): Promise<Content[]> {
+    const lowerQuery = query.toLowerCase();
+    return Array.from(this.content.values()).filter(
+      (item) =>
+        item.title.toLowerCase().includes(lowerQuery) ||
+        item.description.toLowerCase().includes(lowerQuery) ||
+        item.tags?.some((tag) => tag.toLowerCase().includes(lowerQuery))
     );
   }
 
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const id = randomUUID();
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
+  async createContent(insertContent: InsertContent): Promise<Content> {
+    const id = this.currentId++;
+    const content: Content = { ...insertContent, id, tags: insertContent.tags || [] };
+    this.content.set(id, content);
+    return content;
   }
 }
 
