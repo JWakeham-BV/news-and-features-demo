@@ -11,8 +11,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { SlidersHorizontal, X } from "lucide-react";
+import { SlidersHorizontal, X, ChevronDown } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 import { 
   Select,
   SelectContent,
@@ -26,6 +27,7 @@ const TOPICS = ["Operations", "People", "Equipment & Technology", "Heritage"];
 
 export function FilterSheet() {
   const [regions, setRegions] = useState<string[]>(["Asia", "Middle East", "North America"]);
+  const [isBestMatch, setIsBestMatch] = useState(false);
   
   const toggleRegion = (region: string) => {
     setRegions(prev => 
@@ -51,9 +53,9 @@ export function FilterSheet() {
           <section className="space-y-4">
             <h3 className="text-lg font-bold">Sort by</h3>
             <div className="flex items-center gap-4">
-              <span className="text-sm font-medium">Latest</span>
-              <Switch />
-              <span className="text-sm font-medium">Best match</span>
+              <span className={cn("text-sm font-medium transition-colors", !isBestMatch ? "text-foreground font-bold" : "text-muted-foreground")}>Latest</span>
+              <Switch checked={isBestMatch} onCheckedChange={setIsBestMatch} />
+              <span className={cn("text-sm font-medium transition-colors", isBestMatch ? "text-foreground font-bold" : "text-muted-foreground")}>Best match</span>
             </div>
           </section>
 
@@ -106,7 +108,7 @@ export function FilterSheet() {
             <h3 className="text-lg font-bold">Filter by topic</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {TOPICS.map(topic => (
-                <div key={topic} className="flex items-center gap-3 bg-muted p-4 rounded-lg">
+                <div key={topic} className="flex items-center gap-3 bg-muted p-4 rounded-lg cursor-pointer hover:bg-muted/80 transition-colors">
                   <div className="w-5 h-5 border-2 rounded bg-white" />
                   <span className="flex-1 text-sm font-bold">{topic}</span>
                   <ChevronDown className="w-4 h-4 text-muted-foreground" />
@@ -126,21 +128,3 @@ export function FilterSheet() {
   );
 }
 
-function ChevronDown({ className }: { className?: string }) {
-  return (
-    <svg 
-      xmlns="http://www.w3.org/2000/svg" 
-      width="24" 
-      height="24" 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor" 
-      strokeWidth="2" 
-      strokeLinecap="round" 
-      strokeLinejoin="round" 
-      className={className}
-    >
-      <path d="m6 9 6 6 6-6"/>
-    </svg>
-  );
-}

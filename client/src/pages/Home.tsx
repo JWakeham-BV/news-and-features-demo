@@ -5,7 +5,8 @@ import { SearchInput } from "@/components/SearchInput";
 import { FilterSheet } from "@/components/FilterSheet";
 import { ContentGrid } from "@/components/ContentGrid";
 import { motion, AnimatePresence } from "framer-motion";
-import { Filter, ChevronDown, Loader2 } from "lucide-react";
+import { Filter, ChevronDown, Loader2, X } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
 // Categories for filter chips
@@ -87,32 +88,46 @@ export default function Home() {
           </div>
         </div>
           
-        {/* Animated Filters */}
-          <AnimatePresence>
-            {isSearching && (
-              <motion.div 
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                className="mt-4 flex flex-wrap items-center gap-2 overflow-hidden"
-              >
-                <span className="text-sm font-medium text-muted-foreground mr-2">Filters:</span>
-                {FILTERS.map(filter => (
-                  <button
+        {/* Applied Filters (Visible only when searching) */}
+        <AnimatePresence>
+          {isSearching && (
+            <motion.div 
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="mb-8 flex flex-wrap items-center gap-2 overflow-hidden"
+            >
+              <div className="flex flex-wrap gap-2 items-center">
+                {activeFilter && (
+                  <Badge 
+                    variant="secondary" 
+                    className="px-3 py-1.5 gap-2 rounded-lg bg-muted text-foreground border-none hover:bg-muted/80"
+                  >
+                    {activeFilter}
+                    <X className="w-3 h-3 cursor-pointer" onClick={() => setActiveFilter(null)} />
+                  </Badge>
+                )}
+                {/* Dummy applied filters based on mock-up */}
+                {["Asia", "Cyberspace", "Middle East", "North America", "Senior Leadership", "Space", "QRA"].map(filter => (
+                  <Badge 
                     key={filter}
-                    onClick={() => setActiveFilter(activeFilter === filter ? null : filter)}
-                    className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
-                      activeFilter === filter 
-                        ? "bg-primary text-primary-foreground ring-2 ring-primary/20" 
-                        : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-                    }`}
+                    variant="secondary" 
+                    className="px-3 py-1.5 gap-2 rounded-lg bg-muted text-foreground border-none hover:bg-muted/80"
                   >
                     {filter}
-                  </button>
+                    <X className="w-3 h-3 cursor-pointer" />
+                  </Badge>
                 ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
+                <button 
+                  onClick={() => setActiveFilter(null)}
+                  className="text-sm font-bold flex items-center gap-1 ml-2 hover:underline"
+                >
+                  Clear all (7) <X className="w-4 h-4" />
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
         {/* Content States */}
         {isLoading ? (
           <div className="flex items-center justify-center py-20">
