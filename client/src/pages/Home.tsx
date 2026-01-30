@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { api, type Content } from "@shared/routes";
 import { SearchInput } from "@/components/SearchInput";
+import { FilterSheet } from "@/components/FilterSheet";
 import { ContentGrid } from "@/components/ContentGrid";
 import { motion, AnimatePresence } from "framer-motion";
 import { Filter, ChevronDown, Loader2 } from "lucide-react";
@@ -75,13 +76,14 @@ export default function Home() {
           <h1 className="text-4xl font-display font-bold tracking-tight uppercase shrink-0">
             News and Featured
           </h1>
-          <div className="flex-1 max-w-2xl">
+          <div className="flex-1 max-w-2xl flex items-center gap-4">
             <SearchInput 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onClear={() => setSearchQuery("")}
               isExpanded={isSearching}
             />
+            <FilterSheet />
           </div>
         </div>
           
