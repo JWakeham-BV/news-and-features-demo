@@ -289,7 +289,11 @@ export function FilterSheet({ filters, onFiltersChange, hideRegions }: FilterShe
               )}
             </div>
             <div className="grid grid-cols-1 gap-6">
-              {TOPICS_WITH_SUBTOPICS.map(topic => (
+              {TOPICS_WITH_SUBTOPICS.map(topic => {
+                const parentSelected = filters.parentTopics.includes(topic.name);
+                const selectedSubCount = topic.subtopics.filter(s => filters.subtopics.includes(s)).length;
+                const someChildrenSelected = selectedSubCount > 0 && !parentSelected;
+                return (
                 <div key={topic.name} className="space-y-3">
                   <div
                     onClick={() => toggleTopic(topic.name)}
@@ -302,15 +306,20 @@ export function FilterSheet({ filters, onFiltersChange, hideRegions }: FilterShe
                       }}
                       className={cn(
                         "w-5 h-5 border-2 rounded flex items-center justify-center transition-colors shrink-0",
-                        filters.parentTopics.includes(topic.name)
+                        parentSelected
                           ? "bg-foreground border-foreground"
-                          : "bg-white border-muted-foreground/30"
+                          : someChildrenSelected
+                            ? "bg-white border-foreground/60"
+                            : "bg-white border-muted-foreground/30"
                       )}
                     >
-                      {filters.parentTopics.includes(topic.name) && (
+                      {parentSelected && (
                         <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4">
                           <polyline points="20 6 9 17 4 12" />
                         </svg>
+                      )}
+                      {someChildrenSelected && (
+                        <span className="w-2 h-2 rounded-full bg-foreground" aria-hidden />
                       )}
                     </div>
                     <span className="flex-1 text-sm font-bold">{topic.name}</span>
@@ -340,7 +349,8 @@ export function FilterSheet({ filters, onFiltersChange, hideRegions }: FilterShe
                     </div>
                   )}
                 </div>
-              ))}
+              );
+              })}
             </div>
           </section>
         </div>
