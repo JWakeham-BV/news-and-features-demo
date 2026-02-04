@@ -1,4 +1,5 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useLocation } from "wouter";
 import { useContent } from "@/hooks/use-content";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import type { Content } from "@shared/schema";
@@ -22,24 +23,58 @@ export interface FilterState {
   dateTo?: string;
 }
 
+const DEFAULT_FILTERS: FilterState = {
+  regions: [],
+  subtopics: [],
+  parentTopics: [],
+  sortBy: "latest",
+  filterByDate: false,
+};
+
+function getInitialFilters(): FilterState {
+  if (typeof window === "undefined") return DEFAULT_FILTERS;
+  const params = new URLSearchParams(window.location.search);
+  const parentTopic = params.get("parentTopic");
+  if (parentTopic) {
+    return { ...DEFAULT_FILTERS, parentTopics: [decodeURIComponent(parentTopic)] };
+  }
+  return DEFAULT_FILTERS;
+}
+
 function useHideRegions(): boolean {
   if (typeof window === "undefined") return false;
   return new URLSearchParams(window.location.search).has("disableRegions");
 }
 
 export default function Home() {
+  const [, setLocation] = useLocation();
   const hideRegions = useHideRegions();
   const [searchQuery, setSearchQuery] = useState("");
-  const [filters, setFilters] = useState<FilterState>({
-    regions: [],
-    subtopics: [],
-    parentTopics: [],
-    sortBy: "latest",
-    filterByDate: false,
-  });
+  const [filters, setFilters] = useState<FilterState>(getInitialFilters);
+
+  // Listen for URL changes (browser back/forward) and sync filters from search params
+  useEffect(() => {
+    const syncFiltersFromUrl = () => {
+      const params = new URLSearchParams(window.location.search);
+      const parentTopic = params.get("parentTopic");
+      if (parentTopic) {
+        const decoded = decodeURIComponent(parentTopic);
+        setFilters(prev => ({ ...prev, parentTopics: [decoded] }));
+      } else {
+        setFilters(prev => (prev.parentTopics.length === 0 ? prev : { ...prev, parentTopics: [] }));
+      }
+    };
+    window.addEventListener("popstate", syncFiltersFromUrl);
+    return () => window.removeEventListener("popstate", syncFiltersFromUrl);
+  }, []);
 
   // Demo/POC: content from local dummy data (no server)
   const { data: content = [], isLoading } = useContent();
+
+  function handleMoreByParentTopic(parentTopic: string) {
+    setFilters(prev => ({ ...prev, parentTopics: [parentTopic] }));
+    setLocation(`/?parentTopic=${encodeURIComponent(parentTopic)}`);
+  }
 
   function hasActiveFilters(): boolean {
     return (
@@ -155,6 +190,7 @@ export default function Home() {
       dateFrom: undefined,
       dateTo: undefined,
     });
+    setLocation("/");
   };
 
   const featured = content.find(c => c.isFeatured) || content[0];
@@ -268,8 +304,8 @@ export default function Home() {
         ) : !isSearching ? (
           <div key="landing" ref={contentRef}>
             <NewsAndFeaturedSection featured={featured} gridItems={newsGridItems} />
-            <ContentGrid title="OPERATIONS" items={operations} onViewAll={() => {}} scrollHorizontalOnMobile />
-            <ContentGrid title="EQUIPMENT & TECHNOLOGY" items={equipment} onViewAll={() => {}} scrollHorizontalOnMobile />
+            <ContentGrid title="OPERATIONS" items={operations} onViewAll={() => handleMoreByParentTopic("Operations")} scrollHorizontalOnMobile />
+            <ContentGrid title="EQUIPMENT & TECHNOLOGY" items={equipment} onViewAll={() => handleMoreByParentTopic("Equipment & Technology")} scrollHorizontalOnMobile />
             <ForYouSection items={forYouItems} />
           </div>
         ) : (
