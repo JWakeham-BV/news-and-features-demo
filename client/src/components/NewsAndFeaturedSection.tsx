@@ -27,7 +27,12 @@ export function NewsAndFeaturedSection({ featured, gridItems }: NewsAndFeaturedS
     <div className="mb-16" data-scroll-reveal>
       {featured && (
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-0 rounded-3xl overflow-hidden shadow-2xl shadow-black/10 mb-12 bg-card border border-border/50">
-          <div className="lg:col-span-3 relative aspect-[16/10] lg:aspect-auto lg:min-h-[320px] bg-muted group cursor-pointer">
+          <a
+            href={featured.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="lg:col-span-3 relative aspect-[16/10] lg:aspect-auto lg:min-h-[320px] bg-muted group cursor-pointer block"
+          >
             {featured.imageUrl ? (
               <img
                 src={featured.imageUrl}
@@ -49,7 +54,7 @@ export function NewsAndFeaturedSection({ featured, gridItems }: NewsAndFeaturedS
                 {featured.labelTag}
               </span>
             )}
-          </div>
+          </a>
           <div className="lg:col-span-2 flex flex-col justify-center p-8 md:p-10 bg-card">
             {featured.labelTag && (
               <span className="inline-block px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-md mb-4 uppercase tracking-wider w-fit">
@@ -69,7 +74,10 @@ export function NewsAndFeaturedSection({ featured, gridItems }: NewsAndFeaturedS
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8" data-scroll-reveal>
         <div className="space-y-0">
           {card1 && (
-            <article
+            <a
+              href={card1.url}
+              target="_blank"
+              rel="noopener noreferrer"
               className="group cursor-pointer rounded-xl overflow-hidden bg-card border border-border/50 hover:shadow-xl hover:border-border flex flex-col"
             >
               <div className="relative aspect-[4/3] bg-muted overflow-hidden">
@@ -98,7 +106,7 @@ export function NewsAndFeaturedSection({ featured, gridItems }: NewsAndFeaturedS
                   {card1.description}
                 </p>
               </div>
-            </article>
+            </a>
           )}
         </div>
 
@@ -119,7 +127,10 @@ export function NewsAndFeaturedSection({ featured, gridItems }: NewsAndFeaturedS
 
 function CompactCard({ item }: { item: Content }) {
   return (
-    <article
+    <a
+      href={item.url}
+      target="_blank"
+      rel="noopener noreferrer"
       className="group cursor-pointer rounded-xl overflow-hidden bg-card border border-border/50 hover:shadow-xl hover:border-border flex flex-col"
     >
       <div className="relative aspect-video bg-muted overflow-hidden">
@@ -149,14 +160,17 @@ function CompactCard({ item }: { item: Content }) {
           {item.title}
         </h3>
       </div>
-    </article>
+    </a>
   );
 }
 
 function TextOnlyRow({ item }: { item: Content }) {
   return (
-    <article
-      className="group cursor-pointer py-4 border-b border-border/50 last:border-0 hover:bg-muted/30 -mx-2 px-2 rounded-lg transition-colors"
+    <a
+      href={item.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group cursor-pointer py-4 border-b border-border/50 last:border-0 hover:bg-muted/30 -mx-2 px-2 rounded-lg transition-colors block"
     >
       {item.labelTag && (
         <span className="inline-block text-xs font-bold text-primary uppercase tracking-wider mb-2">
@@ -169,6 +183,6 @@ function TextOnlyRow({ item }: { item: Content }) {
       <p className="text-sm text-muted-foreground line-clamp-2">
         {item.description}
       </p>
-    </article>
+    </a>
   );
 }

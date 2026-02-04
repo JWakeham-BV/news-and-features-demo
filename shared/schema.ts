@@ -10,6 +10,7 @@ export const contentSchema = z.object({
   date: z.string(),
   tags: z.array(z.string()).optional().default([]),
   imageUrl: z.string().optional(),
+  url: z.string(),
   isFeatured: z.boolean().optional(),
   labelTag: z.string().optional(),
   themeTag: z.string().optional(),

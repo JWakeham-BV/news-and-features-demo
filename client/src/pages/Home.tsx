@@ -299,7 +299,13 @@ export default function Home() {
                 <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-widest mb-4">Top Matches</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {topMatches.map((item) => (
-                    <div key={item.id} className="bg-secondary/30 rounded-xl p-6 border border-border/50 hover:border-primary/30 transition-colors cursor-pointer group">
+                    <a
+                      key={item.id}
+                      href={item.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-secondary/30 rounded-xl p-6 border border-border/50 hover:border-primary/30 transition-colors cursor-pointer group block"
+                    >
                       <div className="flex gap-4">
                         <div className="w-24 h-24 bg-background rounded-lg shadow-sm shrink-0 overflow-hidden">
                           {item.imageUrl && <img src={item.imageUrl} className="w-full h-full object-cover" alt="" />}
@@ -313,7 +319,7 @@ export default function Home() {
                           <p className="text-sm text-muted-foreground line-clamp-2">{item.description}</p>
                         </div>
                       </div>
-                    </div>
+                    </a>
                   ))}
                 </div>
               </div>
@@ -324,7 +330,13 @@ export default function Home() {
               <div className="bg-card rounded-xl border border-border shadow-sm divide-y divide-border">
                 {allMatches.length > 0 ? (
                   allMatches.map(item => (
-                    <div key={item.id} className="p-6 hover:bg-muted/30 transition-colors flex flex-col md:flex-row gap-6 cursor-pointer group">
+                    <a
+                      key={item.id}
+                      href={item.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-6 hover:bg-muted/30 transition-colors flex flex-col md:flex-row gap-6 cursor-pointer group block"
+                    >
                       <div className="w-full md:w-48 aspect-video bg-muted rounded-lg shrink-0 overflow-hidden">
                         {item.imageUrl && (
                           <img src={item.imageUrl} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="" />
@@ -345,7 +357,7 @@ export default function Home() {
                           </div>
                         )}
                       </div>
-                    </div>
+                    </a>
                   ))
                 ) : (
                   <div className="p-12 text-center text-muted-foreground">

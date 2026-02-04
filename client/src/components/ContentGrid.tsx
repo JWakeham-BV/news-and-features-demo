@@ -61,14 +61,13 @@ export function ContentGrid({ title, items, onViewAll, layout = "grid", scrollHo
 }
 
 function ContentCard({ item, layout }: { item: Content; layout: "grid" | "list" }) {
-  return (
-    <div
-      className={cn(
-        "group cursor-pointer relative overflow-hidden rounded-xl bg-card border border-border/50",
-        "hover:shadow-xl hover:border-border",
-        layout === "list" ? "flex flex-col md:flex-row gap-6 p-4" : "flex flex-col"
-      )}
-    >
+  const className = cn(
+    "group cursor-pointer relative overflow-hidden rounded-xl bg-card border border-border/50",
+    "hover:shadow-xl hover:border-border",
+    layout === "list" ? "flex flex-col md:flex-row gap-6 p-4" : "flex flex-col"
+  );
+  const inner = (
+    <>
       <div className={cn(
         "relative overflow-hidden bg-muted",
         layout === "list" ? "w-full md:w-64 aspect-video rounded-lg shrink-0" : "w-full aspect-[4/3]"
@@ -118,7 +117,12 @@ function ContentCard({ item, layout }: { item: Content; layout: "grid" | "list" 
           </div>
         )}
       </div>
-    </div>
+    </>
+  );
+  return (
+    <a href={item.url} target="_blank" rel="noopener noreferrer" className={className}>
+      {inner}
+    </a>
   );
 }
 

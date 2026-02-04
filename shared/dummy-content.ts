@@ -21,6 +21,7 @@ export const DUMMY_CONTENT: Content[] = [
     date: "29 October 2025",
     tags: ["Training", "UK", "Main news"],
     imageUrl: PLACEHOLDER_IMG(1),
+    url: "https://www.raf.mod.uk/news/articles/rafs-gladiator-support-contract-with-boeing-defence-uk-extended-for-two-years/",
     isFeatured: true,
     labelTag: "Main news",
   },
@@ -33,6 +34,7 @@ export const DUMMY_CONTENT: Content[] = [
     date: "15 January 2026",
     tags: ["International partnerships", "Middle East", "Europe", "Main news"],
     imageUrl: PLACEHOLDER_IMG(2),
+    url: "https://www.raf.mod.uk/news/articles/12-squadron-deploy-to-the-gulf/",
     labelTag: "Main news",
   },
   {
@@ -44,6 +46,7 @@ export const DUMMY_CONTENT: Content[] = [
     date: "10 January 2026",
     tags: ["Exercises", "Training", "North America", "Oceania", "Europe", "Main news"],
     imageUrl: PLACEHOLDER_IMG(3),
+    url: "https://www.raf.mod.uk/news/articles/raf-deploy-to-nevada-for-exercise-red-flag-2026/",
     labelTag: "Main news",
   },
   {
@@ -55,6 +58,7 @@ export const DUMMY_CONTENT: Content[] = [
     date: "8 January 2026",
     tags: ["Exercises", "Training", "Europe", "UK", "Main news"],
     imageUrl: PLACEHOLDER_IMG(4),
+    url: "https://www.raf.mod.uk/news/articles/royal-air-force-typhoons-lead-nato-allies-in-key-operational-training/",
     labelTag: "Main news",
   },
   {
@@ -66,6 +70,7 @@ export const DUMMY_CONTENT: Content[] = [
     date: "2 January 2026",
     tags: ["Honours", "UK", "Main news"],
     imageUrl: PLACEHOLDER_IMG(5),
+    url: "https://www.raf.mod.uk/news/articles/raf-new-year-honours-2026/",
     labelTag: "Main news",
   },
   {
@@ -77,6 +82,7 @@ export const DUMMY_CONTENT: Content[] = [
     date: "19 January 2026",
     tags: ["Aircraft", "QRA", "Europe", "Middle East", "UK", "Main news"],
     imageUrl: PLACEHOLDER_IMG(6),
+    url: "https://www.raf.mod.uk/news/articles/raf-typhoon-fleet-strengthened-in-205-million-boost-for-british-jobs/",
     labelTag: "Main news",
   },
   {
@@ -88,6 +94,7 @@ export const DUMMY_CONTENT: Content[] = [
     date: "6 June 2025",
     tags: ["D-Day", "Anniversaries", "UK", "Main news"],
     imageUrl: PLACEHOLDER_IMG(7),
+    url: "https://www.raf.mod.uk/news/articles/80th-anniversary-of-d-day-marked-at-the-british-normandy-memorial/",
     labelTag: "Main news",
   },
   {
@@ -99,6 +106,7 @@ export const DUMMY_CONTENT: Content[] = [
     date: "12 November 2025",
     tags: ["Remembrance", "UK", "Main news"],
     imageUrl: PLACEHOLDER_IMG(8),
+    url: "https://www.raf.mod.uk/news/articles/remembrance-commemorations-from-across-the-nation/",
     labelTag: "Main news",
   },
   {
@@ -110,6 +118,7 @@ export const DUMMY_CONTENT: Content[] = [
     date: "20 December 2025",
     tags: ["Sport", "UK", "Main news"],
     imageUrl: PLACEHOLDER_IMG(9),
+    url: "https://www.raf.mod.uk/news/articles/raf-sport-award-winners-2025/",
     labelTag: "Main news",
   },
   {
@@ -121,6 +130,7 @@ export const DUMMY_CONTENT: Content[] = [
     date: "17 December 2025",
     tags: ["Aircraft", "Training", "Europe", "Asia", "UK", "Main news"],
     imageUrl: PLACEHOLDER_IMG(10),
+    url: "https://www.raf.mod.uk/news/articles/first-jupiter-hc2-takes-flight-in-the-uk/",
     labelTag: "Main news",
   },
   {
@@ -132,6 +142,7 @@ export const DUMMY_CONTENT: Content[] = [
     date: "14 June 2025",
     tags: ["Honours", "UK", "Main news"],
     imageUrl: PLACEHOLDER_IMG(11),
+    url: "https://www.raf.mod.uk/news/articles/raf-kings-birthday-honours-2025/",
     labelTag: "Main news",
   },
   {
@@ -143,6 +154,7 @@ export const DUMMY_CONTENT: Content[] = [
     date: "5 November 2025",
     tags: ["Serving families", "Training", "Reserves", "Cyberspace", "UK", "Community & Support news"],
     imageUrl: PLACEHOLDER_IMG(12),
+    url: "https://www.raf.mod.uk/community-support/raf-serving-families-news/serving-families-on-the-move-programme-2025-26-armed-forces-covenant-fund/",
     labelTag: "Community & Support news",
   },
   {
@@ -154,6 +166,7 @@ export const DUMMY_CONTENT: Content[] = [
     date: "22 January 2026",
     tags: ["International partnerships", "Aircraft", "Protection and Policing", "Maritime patrol", "Europe", "UK", "Main news"],
     imageUrl: PLACEHOLDER_IMG(13),
+    url: "https://www.raf.mod.uk/news/articles/raf-poseidon-maritime-aircraft-build-stronger-ties-with-iceland/",
     labelTag: "Main news",
   },
   {
@@ -165,6 +178,7 @@ export const DUMMY_CONTENT: Content[] = [
     date: "18 August 2025",
     tags: ["Sport", "Africa", "Station news"],
     imageUrl: PLACEHOLDER_IMG(14),
+    url: "https://www.raf.mod.uk/our-organisation/stations/ascension-island-base/news/ascension-island-dew-pond-run-2025/",
     labelTag: "Station news",
   },
   {
@@ -176,6 +190,7 @@ export const DUMMY_CONTENT: Content[] = [
     date: "1 July 2025",
     tags: ["Serving families", "UK", "Community & Support news"],
     imageUrl: PLACEHOLDER_IMG(15),
+    url: "https://www.raf.mod.uk/community-support/raf-serving-families-news/supporting-our-families-this-summer-and-beyond/",
     labelTag: "Community & Support news",
     forYou: true,
     themeTag: "Community",
@@ -189,6 +204,7 @@ export const DUMMY_CONTENT: Content[] = [
     date: "3 December 2025",
     tags: ["Serving families", "UK", "Community & Support news"],
     imageUrl: PLACEHOLDER_IMG(16),
+    url: "https://www.raf.mod.uk/community-support/raf-serving-families-news/support-for-those-experiencing-domestic-abuse-sexual-violence-or-stalking/",
     labelTag: "Community & Support news",
   },
   {
@@ -200,6 +216,7 @@ export const DUMMY_CONTENT: Content[] = [
     date: "9 December 2025",
     tags: ["Serving families", "UK", "Station news"],
     imageUrl: PLACEHOLDER_IMG(17),
+    url: "https://www.raf.mod.uk/our-organisation/stations/raf-benson/news/the-band-of-the-raf-regiment-serenade-benson-community/",
     labelTag: "Station news",
     forYou: true,
     handle: "@RAFBenson",
@@ -213,6 +230,7 @@ export const DUMMY_CONTENT: Content[] = [
     date: "11 November 2025",
     tags: ["Remembrance", "Honours", "Europe", "Asia", "UK", "Station news"],
     imageUrl: PLACEHOLDER_IMG(18),
+    url: "https://www.raf.mod.uk/our-organisation/stations/raf-boulmer/news/flight-sergeant-steven-curran/",
     labelTag: "Station news",
   },
   {
@@ -224,6 +242,7 @@ export const DUMMY_CONTENT: Content[] = [
     date: "11 November 2025",
     tags: ["Remembrance", "UK", "Station news"],
     imageUrl: PLACEHOLDER_IMG(19),
+    url: "https://www.raf.mod.uk/our-organisation/stations/raf-boulmer/news/raf-boulmer-and-the-air-command-and-control-force-remembers/",
     labelTag: "Station news",
     forYou: true,
     themeTag: "Remembrance",
@@ -237,6 +256,7 @@ export const DUMMY_CONTENT: Content[] = [
     date: "4 December 2025",
     tags: ["Training", "North America", "Station news"],
     imageUrl: PLACEHOLDER_IMG(20),
+    url: "https://www.raf.mod.uk/our-organisation/stations/raf-brize-norton/news/raf-falcons-use-high-tech-wind-tunnel/",
     labelTag: "Station news",
   },
   {
@@ -248,6 +268,7 @@ export const DUMMY_CONTENT: Content[] = [
     date: "7 January 2026",
     tags: ["Humanitarian aid", "Honours", "International partnerships", "Middle East", "UK", "Station news"],
     imageUrl: PLACEHOLDER_IMG(21),
+    url: "https://www.raf.mod.uk/our-organisation/stations/raf-brize-norton/news/raf-brize-norton-are-the-new-holders-of-the-prestigious-firmin-sword-of-peace/",
     labelTag: "Station news",
     forYou: true,
     themeTag: "Honours",
@@ -261,6 +282,7 @@ export const DUMMY_CONTENT: Content[] = [
     date: "28 December 2025",
     tags: ["Remembrance", "International partnerships", "Europe", "North America", "Asia", "Main news"],
     imageUrl: PLACEHOLDER_IMG(22),
+    url: "https://www.raf.mod.uk/news/articles/hurricane-pilot-and-burma-campaign-veteran-dies-aged-106/",
     labelTag: "Main news",
   },
   {
@@ -272,6 +294,7 @@ export const DUMMY_CONTENT: Content[] = [
     date: "14 January 2026",
     tags: ["International partnerships", "Exercises", "Aircraft", "Europe", "North America", "Middle East", "Asia", "Oceania", "UK", "Main news"],
     imageUrl: PLACEHOLDER_IMG(23),
+    url: "https://www.raf.mod.uk/news/articles/operation-highmast-raf-concludes-landmark-global-deployment/",
     labelTag: "Main news",
     forYou: true,
     themeTag: "Operations",
@@ -285,6 +308,7 @@ export const DUMMY_CONTENT: Content[] = [
     date: "3 November 2025",
     tags: ["International partnerships", "Aircraft", "Senior Leadership", "Team Tempest", "Europe", "Middle East", "Asia", "Oceania", "North America", "UK", "Main news"],
     imageUrl: PLACEHOLDER_IMG(24),
+    url: "https://www.raf.mod.uk/news/articles/legacy-to-lightning-air-chief-marshal-harv-smyth-on-how-yesterdays-jets-shape-todays-5th-gen-tactics/",
     labelTag: "Main news",
     forYou: true,
     themeTag: "5th Gen",
@@ -298,6 +322,7 @@ export const DUMMY_CONTENT: Content[] = [
     date: "24 October 2025",
     tags: ["International partnerships", "Exercises", "Space Command", "Asia", "Oceania", "Main news"],
     imageUrl: PLACEHOLDER_IMG(25),
+    url: "https://www.raf.mod.uk/news/articles/exercise-bersama-lima-2025-strengthening-regional-security-through-multilateral-cooperation/",
     labelTag: "Main news",
   },
   {
@@ -309,6 +334,7 @@ export const DUMMY_CONTENT: Content[] = [
     date: "15 September 2025",
     tags: ["Battle of Britain", "Anniversaries", "UK", "Main news"],
     imageUrl: PLACEHOLDER_IMG(26),
+    url: "https://www.raf.mod.uk/news/articles/raf-marks-85th-anniversary-of-battle-of-britain/",
     labelTag: "Main news",
     forYou: true,
     themeTag: "Heritage",
@@ -322,6 +348,7 @@ export const DUMMY_CONTENT: Content[] = [
     date: "19 January 2026",
     tags: ["Aircraft", "UK", "Main news"],
     imageUrl: PLACEHOLDER_IMG(27),
+    url: "https://www.raf.mod.uk/news/articles/raf-typhoons-benefit-from-453m-investment-securing-1-300-british-jobs/",
     labelTag: "Main news",
   },
   {
@@ -331,8 +358,9 @@ export const DUMMY_CONTENT: Content[] = [
     category: "equipment",
     type: "article",
     date: "16 January 2026",
-    tags: ["Aircraft", "International partnerships", "Protection and Policing", "Air policing", "Europe", "UK", "Main news"],
+    tags: ["Aircraft", "International partnerships", "Protection and Policing", "Europe", "UK", "Main news"],
     imageUrl: PLACEHOLDER_IMG(28),
+    url: "https://www.raf.mod.uk/news/articles/royal-air-force-typhoons-fly-first-sortie-for-operation-eastern-sentry/",
     labelTag: "Main news",
   },
   {
@@ -342,8 +370,9 @@ export const DUMMY_CONTENT: Content[] = [
     category: "equipment",
     type: "article",
     date: "13 January 2026",
-    tags: ["QRA", "International partnerships", "Protection and Policing", "Air policing", "NATO air policing", "Aircraft", "Europe", "Main news"],
+    tags: ["QRA", "International partnerships", "Protection and Policing", "Aircraft", "Europe", "Main news"],
     imageUrl: PLACEHOLDER_IMG(29),
+    url: "https://www.raf.mod.uk/news/articles/raf-typhoon-fgr4-aircraft-intercept-multiple-russian-aircraft-during-enhanced-air-policing-sortie/",
     labelTag: "Main news",
   },
   {
@@ -355,6 +384,7 @@ export const DUMMY_CONTENT: Content[] = [
     date: "6 January 2026",
     tags: ["Remembrance", "Training", "Europe", "Station news"],
     imageUrl: PLACEHOLDER_IMG(30),
+    url: "https://www.raf.mod.uk/our-organisation/stations/raf-st-mawgan/news/raf-st-mawgan-personnel-embark-on-educational-visit-to-poland/",
     labelTag: "Station news",
   },
   {
@@ -366,6 +396,7 @@ export const DUMMY_CONTENT: Content[] = [
     date: "20 December 2025",
     tags: ["Serving families", "Remembrance", "UK", "Station news"],
     imageUrl: PLACEHOLDER_IMG(31),
+    url: "https://www.raf.mod.uk/our-organisation/stations/raf-st-mawgan/news/raf-st-mawgan-hosts-fourth-annual-op-christmas-to-honour-local-veterans/",
     labelTag: "Station news",
     forYou: true,
     themeTag: "Veterans",
@@ -379,6 +410,7 @@ export const DUMMY_CONTENT: Content[] = [
     date: "21 January 2026",
     tags: ["Protection and Policing", "NATO air policing", "Air policing", "International partnerships", "Europe", "UK", "Main news"],
     imageUrl: PLACEHOLDER_IMG(32),
+    url: "https://www.raf.mod.uk/news/articles/",
     labelTag: "Main news",
   },
 ];
