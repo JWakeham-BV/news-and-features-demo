@@ -9,11 +9,15 @@ import { NewsAndFeaturedSection } from "@/components/NewsAndFeaturedSection";
 import { ForYouSection } from "@/components/ForYouSection";
 import { Loader2, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import { cn } from "@/lib/utils";
 
 export interface FilterState {
   regions: string[];
   subtopics: string[];
+  parentTopics: string[];
   sortBy: "latest" | "bestMatch";
+  filterByDate: boolean;
   dateFrom?: string;
   dateTo?: string;
 }
@@ -23,14 +27,21 @@ export default function Home() {
   const [filters, setFilters] = useState<FilterState>({
     regions: [],
     subtopics: [],
+    parentTopics: [],
     sortBy: "latest",
+    filterByDate: false,
   });
 
   // Demo/POC: content from local dummy data (no server)
   const { data: content = [], isLoading } = useContent();
 
   function hasActiveFilters(): boolean {
-    return filters.regions.length > 0 || filters.subtopics.length > 0;
+    return (
+      filters.regions.length > 0 ||
+      filters.subtopics.length > 0 ||
+      filters.parentTopics.length > 0 ||
+      (filters.filterByDate && (!!filters.dateFrom || !!filters.dateTo))
+    );
   }
 
   // Client-side filtering for POC responsiveness
@@ -59,6 +70,30 @@ export default function Home() {
       if (!matchesRegion) return false;
     }
 
+    // Parent topic filtering (e.g. "Operations" = category operations or any of its subtopics)
+    const PARENT_TO_CATEGORY: Record<string, string> = {
+      "Operations": "operations",
+      "Equipment & Technology": "equipment",
+    };
+    const TOPICS_WITH_SUBTOPICS = [
+      { name: "Operations", subtopics: ["Training", "Humanitarian aid", "QRA", "International partnerships", "Exercises", "Protection and Policing"] },
+      { name: "People", subtopics: ["Serving families", "Honours", "Sport", "Senior Leadership", "Reserves"] },
+      { name: "Equipment & Technology", subtopics: ["Aircraft", "Team Tempest", "Space Command", "Cyberspace"] },
+      { name: "Heritage", subtopics: ["Battle of Britain", "D-Day", "Remembrance", "Anniversaries"] },
+    ];
+    if (filters.parentTopics.length > 0) {
+      const matchesParent = filters.parentTopics.some(parentName => {
+        const config = TOPICS_WITH_SUBTOPICS.find(t => t.name === parentName);
+        if (!config) return false;
+        const category = PARENT_TO_CATEGORY[parentName];
+        if (category && item.category === category) return true;
+        return config.subtopics.some(sub =>
+          item.tags?.some(tag => tag.toLowerCase() === sub.toLowerCase())
+        );
+      });
+      if (!matchesParent) return false;
+    }
+
     // Subtopic filtering (check tags and category)
     if (filters.subtopics.length > 0) {
       const matchesSubtopic = filters.subtopics.some(subtopic =>
@@ -67,6 +102,21 @@ export default function Home() {
         item.description.toLowerCase().includes(subtopic.toLowerCase())
       );
       if (!matchesSubtopic) return false;
+    }
+
+    // Date filtering
+    if (filters.filterByDate && (filters.dateFrom || filters.dateTo)) {
+      const itemTime = new Date(item.date).getTime();
+      if (filters.dateFrom) {
+        const from = new Date(filters.dateFrom);
+        from.setHours(0, 0, 0, 0);
+        if (itemTime < from.getTime()) return false;
+      }
+      if (filters.dateTo) {
+        const to = new Date(filters.dateTo);
+        to.setHours(23, 59, 59, 999);
+        if (itemTime > to.getTime()) return false;
+      }
     }
 
     return true;
@@ -80,12 +130,12 @@ export default function Home() {
     return 0;
   });
 
-  const removeFilter = (type: "region" | "subtopic", value: string) => {
+  const removeFilter = (type: "region" | "subtopic" | "parentTopic", value: string) => {
     setFilters(prev => ({
       ...prev,
-      [type === "region" ? "regions" : "subtopics"]: prev[type === "region" ? "regions" : "subtopics"].filter(
-        item => item !== value
-      ),
+      ...(type === "region" && { regions: prev.regions.filter(r => r !== value) }),
+      ...(type === "subtopic" && { subtopics: prev.subtopics.filter(s => s !== value) }),
+      ...(type === "parentTopic" && { parentTopics: prev.parentTopics.filter(p => p !== value) }),
     }));
   };
 
@@ -93,7 +143,11 @@ export default function Home() {
     setFilters({
       regions: [],
       subtopics: [],
+      parentTopics: [],
       sortBy: "latest",
+      filterByDate: false,
+      dateFrom: undefined,
+      dateTo: undefined,
     });
   };
 
@@ -159,6 +213,21 @@ export default function Home() {
                   </button>
                 </Badge>
               ))}
+              {filters.parentTopics.map(parent => (
+                <Badge
+                  key={`parent-${parent}`}
+                  variant="secondary"
+                  className="px-3 py-1.5 gap-2 rounded-lg bg-muted text-foreground border-none hover:bg-muted/80 cursor-default"
+                >
+                  {parent}
+                  <button
+                    onClick={() => removeFilter("parentTopic", parent)}
+                    className="ml-1 hover:bg-muted-foreground/20 rounded-full p-0.5 transition-colors"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </Badge>
+              ))}
               {filters.subtopics.map(subtopic => (
                 <Badge
                   key={`subtopic-${subtopic}`}
@@ -207,9 +276,13 @@ export default function Home() {
                   <span className="text-foreground font-bold">{sortedContent.length} results</span>
                 )}
               </h2>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <span>Sort by:</span>
-                <span className="font-medium text-foreground capitalize">{filters.sortBy === "latest" ? "Latest" : "Best match"}</span>
+              <div className="flex items-center gap-4">
+                <span className={cn("text-sm font-medium transition-colors", filters.sortBy === "latest" ? "text-foreground font-bold" : "text-muted-foreground")}>Latest</span>
+                <Switch
+                  checked={filters.sortBy === "bestMatch"}
+                  onCheckedChange={(checked) => setFilters(prev => ({ ...prev, sortBy: checked ? "bestMatch" : "latest" }))}
+                />
+                <span className={cn("text-sm font-medium transition-colors", filters.sortBy === "bestMatch" ? "text-foreground font-bold" : "text-muted-foreground")}>Best match</span>
               </div>
             </div>
 
