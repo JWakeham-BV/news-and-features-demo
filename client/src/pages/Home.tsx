@@ -163,10 +163,10 @@ export default function Home() {
   const equipment = content.filter(c => c.category === "equipment").slice(0, 4);
   const forYouItems = content.filter(c => c.forYou === true);
 
-  const topMatches = sortedContent.slice(0, 2);
+  const topMatches = sortedContent.slice(0, 5);
   const contentRef = useRef<HTMLDivElement>(null);
   useScrollReveal(contentRef, !isLoading && !isSearching);
-  const allMatches = sortedContent.slice(2);
+  const allMatches = sortedContent.slice(5);
 
   return (
     <div className="min-h-screen bg-background font-sans text-foreground pb-20">
@@ -297,30 +297,130 @@ export default function Home() {
             {topMatches.length > 0 && (
               <div className="mb-12">
                 <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-widest mb-4">Top Matches</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {topMatches.map((item) => (
+                <div className="grid grid-cols-1 md:grid-cols-2 md:grid-flow-col gap-4 md:grid-rows-[repeat(12,_1fr)]">
+                  {/* Column 1: Primary (content over image) + Secondary (image left, content right) */}
+                  {topMatches[0] && (
                     <a
-                      key={item.id}
-                      href={item.url}
+                      href={topMatches[0].url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="bg-secondary/30 rounded-xl p-6 border border-border/50 hover:border-primary/30 transition-colors cursor-pointer group block"
+                      className="md:row-span-7 relative flex flex-col rounded-xl border border-border/50 bg-card overflow-hidden hover:shadow-xl hover:border-primary/30 transition-all cursor-pointer group min-h-[280px] md:min-h-0"
                     >
-                      <div className="flex gap-4">
-                        <div className="w-24 h-24 bg-background rounded-lg shadow-sm shrink-0 overflow-hidden">
-                          {item.imageUrl && <img src={item.imageUrl} className="w-full h-full object-cover" alt="" />}
-                        </div>
-                        <div>
-                          <div className="flex items-center gap-2 mb-2">
-                            <span className="text-xs font-bold text-primary uppercase">{item.category}</span>
-                            <span className="text-xs text-muted-foreground">• {item.date}</span>
-                          </div>
-                          <h4 className="font-bold text-lg mb-2 group-hover:text-primary transition-colors">{item.title}</h4>
-                          <p className="text-sm text-muted-foreground line-clamp-2">{item.description}</p>
-                        </div>
+                      <div className="absolute inset-0 bg-muted">
+                        {topMatches[0].imageUrl ? (
+                          <img src={topMatches[0].imageUrl} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="" />
+                        ) : (
+                          <div className="w-full h-full bg-secondary/30" />
+                        )}
+                      </div>
+                      <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5 bg-gradient-to-t from-black/80 via-black/50 to-transparent">
+                        <span className="text-xs font-bold text-white/90 uppercase tracking-wider">{topMatches[0].labelTag ?? topMatches[0].category}</span>
+                        <h4 className="font-display font-bold text-lg md:text-xl text-white mt-1 mb-1 group-hover:text-primary transition-colors line-clamp-3">{topMatches[0].title}</h4>
+                        <span className="text-xs text-white/80">{topMatches[0].date}</span>
                       </div>
                     </a>
-                  ))}
+                  )}
+                  {topMatches[1] && (
+                    <a
+                      href={topMatches[1].url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex flex-row rounded-xl border md:row-span-5 border-border/50 bg-card overflow-hidden hover:shadow-xl hover:border-primary/30 transition-all cursor-pointer group min-h-0"
+                    >
+                      <div className="w-2/5 min-w-[40%] shrink-0 aspect-video bg-muted overflow-hidden">
+                        {topMatches[1].imageUrl ? (
+                          <img src={topMatches[1].imageUrl} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="" />
+                        ) : (
+                          <div className="w-full h-full bg-secondary/30" />
+                        )}
+                      </div>
+                      <div className="flex-1 flex flex-col justify-center p-3 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap mb-0.5">
+                          {(topMatches[1].tags?.slice(0, 2) ?? [topMatches[1].category]).map(tag => (
+                            <span key={tag} className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">{tag}</span>
+                          ))}
+                        </div>
+                        <h4 className="font-display font-bold text-sm group-hover:text-primary transition-colors line-clamp-2">{topMatches[1].title}</h4>
+                        <span className="text-[10px] text-muted-foreground mt-0.5">{topMatches[1].date}</span>
+                      </div>
+                    </a>
+                  )}
+                  {/* Column 2: Three secondary-style cards (image left, content right) */}
+                  {topMatches[2] && (
+                    <a
+                      href={topMatches[2].url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex flex-row rounded-xl border md:row-span-4 border-border/50 bg-card overflow-hidden hover:shadow-xl hover:border-primary/30 transition-all cursor-pointer group min-h-0"
+                    >
+                      <div className="w-2/5 min-w-[40%] shrink-0 aspect-video bg-muted overflow-hidden">
+                        {topMatches[2].imageUrl ? (
+                          <img src={topMatches[2].imageUrl} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="" />
+                        ) : (
+                          <div className="w-full h-full bg-secondary/30" />
+                        )}
+                      </div>
+                      <div className="flex-1 flex flex-col justify-center p-3 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap mb-0.5">
+                          {(topMatches[2].tags?.slice(0, 2) ?? [topMatches[2].category]).map(tag => (
+                            <span key={tag} className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">{tag}</span>
+                          ))}
+                        </div>
+                        <h4 className="font-display font-bold text-sm group-hover:text-primary transition-colors line-clamp-2">{topMatches[2].title}</h4>
+                        <span className="text-[10px] text-muted-foreground mt-0.5">{topMatches[2].date}</span>
+                      </div>
+                    </a>
+                  )}
+                  {topMatches[3] && (
+                    <a
+                      href={topMatches[3].url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex flex-row rounded-xl border md:row-span-4 border-border/50 bg-card overflow-hidden hover:shadow-xl hover:border-primary/30 transition-all cursor-pointer group min-h-0"
+                    >
+                      <div className="w-2/5 min-w-[40%] shrink-0 aspect-video bg-muted overflow-hidden">
+                        {topMatches[3].imageUrl ? (
+                          <img src={topMatches[3].imageUrl} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="" />
+                        ) : (
+                          <div className="w-full h-full bg-secondary/30" />
+                        )}
+                      </div>
+                      <div className="flex-1 flex flex-col justify-center p-3 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap mb-0.5">
+                          {(topMatches[3].tags?.slice(0, 2) ?? [topMatches[3].category]).map(tag => (
+                            <span key={tag} className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">{tag}</span>
+                          ))}
+                        </div>
+                        <h4 className="font-display font-bold text-sm group-hover:text-primary transition-colors line-clamp-2">{topMatches[3].title}</h4>
+                        <span className="text-[10px] text-muted-foreground mt-0.5">{topMatches[3].date}</span>
+                      </div>
+                    </a>
+                  )}
+                  {topMatches[4] && (
+                    <a
+                      href={topMatches[4].url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex flex-row rounded-xl md:row-span-4 border border-border/50 bg-card overflow-hidden hover:shadow-xl hover:border-primary/30 transition-all cursor-pointer group min-h-0"
+                    >
+                      <div className="w-2/5 min-w-[40%] shrink-0 aspect-video bg-muted overflow-hidden">
+                        {topMatches[4].imageUrl ? (
+                          <img src={topMatches[4].imageUrl} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="" />
+                        ) : (
+                          <div className="w-full h-full bg-secondary/30" />
+                        )}
+                      </div>
+                      <div className="flex-1 flex flex-col justify-center p-3 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap mb-0.5">
+                          {(topMatches[4].tags?.slice(0, 2) ?? [topMatches[4].category]).map(tag => (
+                            <span key={tag} className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">{tag}</span>
+                          ))}
+                        </div>
+                        <h4 className="font-display font-bold text-sm group-hover:text-primary transition-colors line-clamp-2">{topMatches[4].title}</h4>
+                        <span className="text-[10px] text-muted-foreground mt-0.5">{topMatches[4].date}</span>
+                      </div>
+                    </a>
+                  )}
                 </div>
               </div>
             )}
