@@ -18,11 +18,11 @@ export function ContentGrid({ title, items, onViewAll, layout = "grid" }: Conten
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold tracking-tight text-foreground/90 uppercase font-display">{title}</h2>
         {onViewAll && (
-          <button 
+          <button
             onClick={onViewAll}
             className="text-sm font-semibold text-primary hover:text-primary/80 flex items-center gap-1 transition-colors"
           >
-            VIEW ALL <ArrowRight className="w-4 h-4" />
+            More {title.split(" ").map((w) => w.charAt(0) + w.slice(1).toLowerCase()).join(" ")} <ArrowRight className="w-4 h-4" />
           </button>
         )}
       </div>
@@ -86,7 +86,7 @@ function ContentCard({ item, index, layout }: { item: Content; index: number; la
         layout === "list" ? "justify-center flex-1" : "p-5"
       )}>
         <div className="flex items-center gap-2 mb-2 text-xs font-medium text-muted-foreground uppercase tracking-wider">
-          <span className="text-primary">{item.category}</span>
+          <span className="text-primary">{item.labelTag ?? item.category}</span>
           <span>•</span>
           <span>{item.date}</span>
         </div>

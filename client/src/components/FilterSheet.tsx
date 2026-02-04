@@ -23,6 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import type { FilterState } from "@/pages/Home";
 
 const TOPICS_WITH_SUBTOPICS = [
   {
@@ -43,11 +44,13 @@ const TOPICS_WITH_SUBTOPICS = [
   }
 ];
 
-export function FilterSheet() {
-  const [regions, setRegions] = useState<string[]>(["Asia", "Middle East", "North America"]);
-  const [isBestMatch, setIsBestMatch] = useState(false);
+interface FilterSheetProps {
+  filters: FilterState;
+  onFiltersChange: (filters: FilterState) => void;
+}
+
+export function FilterSheet({ filters, onFiltersChange }: FilterSheetProps) {
   const [expandedTopics, setExpandedTopics] = useState<string[]>(["Operations", "People", "Equipment & Technology", "Heritage"]);
-  const [selectedSubtopics, setSelectedSubtopics] = useState<string[]>(["Honours", "Reserves"]);
   
   const toggleTopic = (topicName: string) => {
     setExpandedTopics(prev => 
@@ -56,15 +59,42 @@ export function FilterSheet() {
   };
 
   const toggleSubtopic = (subtopic: string) => {
-    setSelectedSubtopics(prev =>
-      prev.includes(subtopic) ? prev.filter(s => s !== subtopic) : [...prev, subtopic]
-    );
+    onFiltersChange({
+      ...filters,
+      subtopics: filters.subtopics.includes(subtopic)
+        ? filters.subtopics.filter(s => s !== subtopic)
+        : [...filters.subtopics, subtopic]
+    });
   };
 
   const toggleRegion = (region: string) => {
-    setRegions(prev => 
-      prev.includes(region) ? prev.filter(r => r !== region) : [...prev, region]
-    );
+    onFiltersChange({
+      ...filters,
+      regions: filters.regions.includes(region)
+        ? filters.regions.filter(r => r !== region)
+        : [...filters.regions, region]
+    });
+  };
+
+  const clearRegions = () => {
+    onFiltersChange({
+      ...filters,
+      regions: []
+    });
+  };
+
+  const clearSubtopics = () => {
+    onFiltersChange({
+      ...filters,
+      subtopics: []
+    });
+  };
+
+  const handleSortChange = (isBestMatch: boolean) => {
+    onFiltersChange({
+      ...filters,
+      sortBy: isBestMatch ? "bestMatch" : "latest"
+    });
   };
 
   return (
@@ -85,9 +115,9 @@ export function FilterSheet() {
           <section className="space-y-4">
             <h3 className="text-lg font-bold">Sort by</h3>
             <div className="flex items-center gap-4">
-              <span className={cn("text-sm font-medium transition-colors", !isBestMatch ? "text-foreground font-bold" : "text-muted-foreground")}>Latest</span>
-              <Switch checked={isBestMatch} onCheckedChange={setIsBestMatch} />
-              <span className={cn("text-sm font-medium transition-colors", isBestMatch ? "text-foreground font-bold" : "text-muted-foreground")}>Best match</span>
+              <span className={cn("text-sm font-medium transition-colors", filters.sortBy === "latest" ? "text-foreground font-bold" : "text-muted-foreground")}>Latest</span>
+              <Switch checked={filters.sortBy === "bestMatch"} onCheckedChange={handleSortChange} />
+              <span className={cn("text-sm font-medium transition-colors", filters.sortBy === "bestMatch" ? "text-foreground font-bold" : "text-muted-foreground")}>Best match</span>
             </div>
           </section>
 
@@ -114,18 +144,20 @@ export function FilterSheet() {
           <section className="space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-bold">Filter by region</h3>
-              <button 
-                onClick={() => setRegions([])}
-                className="text-sm font-bold flex items-center gap-1 hover:underline"
-              >
-                Clear all <X className="w-4 h-4" />
-              </button>
+              {filters.regions.length > 0 && (
+                <button 
+                  onClick={clearRegions}
+                  className="text-sm font-bold flex items-center gap-1 hover:underline"
+                >
+                  Clear all <X className="w-4 h-4" />
+                </button>
+              )}
             </div>
             <div className="flex flex-wrap gap-2">
               {REGIONS.map(region => (
                 <Badge
                   key={region}
-                  variant={regions.includes(region) ? "default" : "outline"}
+                  variant={filters.regions.includes(region) ? "default" : "outline"}
                   className="cursor-pointer px-4 py-2 rounded-lg text-sm font-medium h-auto"
                   onClick={() => toggleRegion(region)}
                 >
@@ -139,12 +171,14 @@ export function FilterSheet() {
           <section className="space-y-4 pb-10">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-bold">Filter by topic</h3>
-              <button 
-                onClick={() => setSelectedSubtopics([])}
-                className="text-sm font-bold flex items-center gap-1 hover:underline"
-              >
-                Clear all <X className="w-4 h-4" />
-              </button>
+              {filters.subtopics.length > 0 && (
+                <button 
+                  onClick={clearSubtopics}
+                  className="text-sm font-bold flex items-center gap-1 hover:underline"
+                >
+                  Clear all <X className="w-4 h-4" />
+                </button>
+              )}
             </div>
             <div className="grid grid-cols-1 gap-6">
               {TOPICS_WITH_SUBTOPICS.map(topic => (
@@ -154,7 +188,7 @@ export function FilterSheet() {
                     className="flex items-center gap-3 bg-muted p-4 rounded-lg cursor-pointer hover:bg-muted/80 transition-colors"
                   >
                     <div className="w-5 h-5 border-2 rounded bg-white flex items-center justify-center">
-                      {topic.subtopics.some(s => selectedSubtopics.includes(s)) && (
+                      {topic.subtopics.some(s => filters.subtopics.includes(s)) && (
                         <div className="w-2 h-2 bg-foreground rounded-full" />
                       )}
                     </div>
@@ -170,10 +204,10 @@ export function FilterSheet() {
                             onClick={() => toggleSubtopic(sub)}
                             className={cn(
                               "w-5 h-5 border-2 rounded flex items-center justify-center transition-colors",
-                              selectedSubtopics.includes(sub) ? "bg-foreground border-foreground" : "bg-white border-muted-foreground/30"
+                              filters.subtopics.includes(sub) ? "bg-foreground border-foreground" : "bg-white border-muted-foreground/30"
                             )}
                           >
-                            {selectedSubtopics.includes(sub) && (
+                            {filters.subtopics.includes(sub) && (
                               <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4">
                                 <polyline points="20 6 9 17 4 12" />
                               </svg>
