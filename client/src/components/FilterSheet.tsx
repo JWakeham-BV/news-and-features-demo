@@ -56,9 +56,11 @@ function parentOf(subtopic: string): string | undefined {
 interface FilterSheetProps {
   filters: FilterState;
   onFiltersChange: (filters: FilterState) => void;
+  /** When true, the "Filter by region" section is hidden (e.g. when ?disableRegions is in the URL). */
+  hideRegions?: boolean;
 }
 
-export function FilterSheet({ filters, onFiltersChange }: FilterSheetProps) {
+export function FilterSheet({ filters, onFiltersChange, hideRegions }: FilterSheetProps) {
   const [expandedTopics, setExpandedTopics] = useState<string[]>(["Operations", "People", "Equipment & Technology", "Heritage"]);
   
   const toggleTopic = (topicName: string) => {
@@ -232,44 +234,46 @@ export function FilterSheet({ filters, onFiltersChange }: FilterSheetProps) {
           </section>
 
           {/* Filter by Region */}
-          <section className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-lg font-bold">Filter by region</h3>
-              {filters.regions.length > 0 && (
-                <button 
-                  onClick={clearRegions}
-                  className="text-sm font-bold flex items-center gap-1 hover:underline"
-                >
-                  Clear all <X className="w-4 h-4" />
-                </button>
-              )}
-            </div>
-            <div className="flex flex-wrap gap-2 items-center">
-              {EARTH_REGIONS.map(region => (
-                <Badge
-                  key={region}
-                  variant={filters.regions.includes(region) ? "default" : "outline"}
-                  className="cursor-pointer px-4 py-2 rounded-lg text-sm font-medium h-auto"
-                  onClick={() => toggleRegion(region)}
-                >
-                  {region}
-                </Badge>
-              ))}
-              <div className="w-full py-1">
-                <Separator className="h-0.5 bg-muted-foreground/20" />
+          {!hideRegions && (
+            <section className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-bold">Filter by region</h3>
+                {filters.regions.length > 0 && (
+                  <button 
+                    onClick={clearRegions}
+                    className="text-sm font-bold flex items-center gap-1 hover:underline"
+                  >
+                    Clear all <X className="w-4 h-4" />
+                  </button>
+                )}
               </div>
-              {SPACE_REGION.map(region => (
-                <Badge
-                  key={region}
-                  variant={filters.regions.includes(region) ? "default" : "outline"}
-                  className="cursor-pointer px-4 py-2 rounded-lg text-sm font-medium h-auto"
-                  onClick={() => toggleRegion(region)}
-                >
-                  {region}
-                </Badge>
-              ))}
-            </div>
-          </section>
+              <div className="flex flex-wrap gap-2 items-center">
+                {EARTH_REGIONS.map(region => (
+                  <Badge
+                    key={region}
+                    variant={filters.regions.includes(region) ? "default" : "outline"}
+                    className="cursor-pointer px-4 py-2 rounded-lg text-sm font-medium h-auto"
+                    onClick={() => toggleRegion(region)}
+                  >
+                    {region}
+                  </Badge>
+                ))}
+                <div className="w-full py-1">
+                  <Separator className="h-0.5 bg-muted-foreground/20" />
+                </div>
+                {SPACE_REGION.map(region => (
+                  <Badge
+                    key={region}
+                    variant={filters.regions.includes(region) ? "default" : "outline"}
+                    className="cursor-pointer px-4 py-2 rounded-lg text-sm font-medium h-auto"
+                    onClick={() => toggleRegion(region)}
+                  >
+                    {region}
+                  </Badge>
+                ))}
+              </div>
+            </section>
+          )}
 
           {/* Filter by Topic */}
           <section className="space-y-4 pb-10">

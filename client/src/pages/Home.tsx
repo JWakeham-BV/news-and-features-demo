@@ -22,7 +22,13 @@ export interface FilterState {
   dateTo?: string;
 }
 
+function useHideRegions(): boolean {
+  if (typeof window === "undefined") return false;
+  return new URLSearchParams(window.location.search).has("disableRegions");
+}
+
 export default function Home() {
+  const hideRegions = useHideRegions();
   const [searchQuery, setSearchQuery] = useState("");
   const [filters, setFilters] = useState<FilterState>({
     regions: [],
@@ -191,6 +197,7 @@ export default function Home() {
             <FilterSheet
               filters={filters}
               onFiltersChange={setFilters}
+              hideRegions={hideRegions}
             />
           </div>
         </div>
@@ -198,21 +205,22 @@ export default function Home() {
         {hasActiveFilters() && (
           <div className="mb-8 flex flex-wrap items-center gap-2 overflow-hidden">
             <div className="flex flex-wrap gap-2 items-center">
-              {filters.regions.map(region => (
-                <Badge
-                  key={`region-${region}`}
-                  variant="secondary"
-                  className="px-3 py-1.5 gap-2 rounded-lg bg-muted text-foreground border-none hover:bg-muted/80 cursor-default"
-                >
-                  {region}
-                  <button
-                    onClick={() => removeFilter("region", region)}
-                    className="ml-1 hover:bg-muted-foreground/20 rounded-full p-0.5 transition-colors"
+              {!hideRegions &&
+                filters.regions.map(region => (
+                  <Badge
+                    key={`region-${region}`}
+                    variant="secondary"
+                    className="px-3 py-1.5 gap-2 rounded-lg bg-muted text-foreground border-none hover:bg-muted/80 cursor-default"
                   >
-                    <X className="w-3 h-3" />
-                  </button>
-                </Badge>
-              ))}
+                    {region}
+                    <button
+                      onClick={() => removeFilter("region", region)}
+                      className="ml-1 hover:bg-muted-foreground/20 rounded-full p-0.5 transition-colors"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </Badge>
+                ))}
               {filters.parentTopics.map(parent => (
                 <Badge
                   key={`parent-${parent}`}
