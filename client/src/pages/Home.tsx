@@ -304,7 +304,7 @@ export default function Home() {
                       href={topMatches[0].url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="md:row-span-7 relative flex flex-col rounded-xl border border-border/50 bg-card overflow-hidden hover:shadow-xl hover:border-primary/30 transition-all cursor-pointer group min-h-[280px] md:min-h-0"
+                      className="md:row-span-7 min-h-[320px] relative flex flex-col rounded-xl border border-border/50 bg-card overflow-hidden hover:shadow-xl hover:border-primary/30 transition-all cursor-pointer group"
                     >
                       <div className="absolute inset-0 bg-muted">
                         {topMatches[0].imageUrl ? (
