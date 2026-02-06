@@ -2,9 +2,9 @@ import { useState, useRef, useEffect } from "react";
 import { useLocation } from "wouter";
 import { useContent } from "@/hooks/use-content";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
-import type { Content } from "@shared/schema";
 import { SearchInput } from "@/components/SearchInput";
 import { FilterSheet } from "@/components/FilterSheet";
+import RafLogo from "@/components/RafLogo";
 import { ContentGrid } from "@/components/ContentGrid";
 import { MultimediaCarousel } from "@/components/MultimediaCarousel";
 import { NewsAndFeaturedSection } from "@/components/NewsAndFeaturedSection";
@@ -219,15 +219,15 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background font-sans text-foreground pb-20">
-      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
+      <header className="bg-background/80 border-t-4 border-[#002F5F]">
         <div className="max-w-[1608px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2 font-display font-bold text-xl tracking-tight">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white">
-              S
-            </div>
-            <span>SEARCH<span className="text-primary">POC</span></span>
-          </div>
-          <div className="w-8 h-8 rounded-full bg-secondary"></div>
+          <a
+            href="/"
+            className="flex items-center px-6 py-4 rounded-b-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[#002F5F] focus-visible:ring-offset-2"
+            style={{ backgroundColor: "#002F5F" }}
+          >
+            <RafLogo className="h-12 w-auto max-w-[220px] sm:max-w-[260px]" />
+          </a>
         </div>
       </header>
 
