@@ -13,6 +13,7 @@ import { Loader2, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
+import { useStickyMenu } from "@/hooks/use-sticky-menu";
 
 export interface FilterState {
   regions: string[];
@@ -62,7 +63,8 @@ export default function Home() {
   const hideRegions = useHideRegions();
   const [searchQuery, setSearchQuery] = useState("");
   const [filters, setFilters] = useState<FilterState>(getInitialFilters);
-
+  const menuRef = useRef<HTMLDivElement>(null);
+  useStickyMenu(menuRef);
   // Listen for URL changes (browser back/forward) and sync filters from search params
   useEffect(() => {
     const syncFiltersFromUrl = () => {
@@ -232,11 +234,11 @@ export default function Home() {
       </header>
 
       <main className="max-w-[1608px] mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-        <div className="relative z-40 mb-12 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div className="mb-12 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <h1 className="text-4xl font-display font-bold tracking-tight uppercase shrink-0">
             News and Featured
           </h1>
-          <div className="flex-1 max-w-2xl flex items-center gap-4">
+          <div ref={menuRef} className="z-10 flex-1 max-w-2xl flex items-center gap-4">
             <SearchInput
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}

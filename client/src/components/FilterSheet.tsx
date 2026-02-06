@@ -130,7 +130,7 @@ export function FilterSheet({ filters, onFiltersChange, hideRegions }: FilterShe
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline" className="gap-2 h-14 rounded-2xl px-6 border-2">
+        <Button variant="default" className="gap-2 h-14 rounded-2xl px-6">
           <SlidersHorizontal className="w-5 h-5" />
           <span className="font-bold">Filters</span>
         </Button>
